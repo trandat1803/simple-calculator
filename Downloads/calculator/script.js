@@ -34,10 +34,44 @@ function deleteDigit() {
 
 function calculate() {
     if (!endsWithOperator()) {
-        display.innerText = eval(display.innerText);
+        const result = value(display,innerText);
+        display.innerText = result;
     }
 }
 
 function endsWithOperator() {
     return /[+\-*/%]$/.test(display.innerText);
+}
+
+function value(expression, innerText) {
+    try{
+        const tokens = expression.split(/([+\-*/%])/);
+        let currentValue = parseFloat(tokens[0]);
+
+        for(let i = 1; i < tokens.length; i+=2){
+            const operator = tokens[i];
+            const nextValue = parseFloat(tokens[i+1]);
+            switch (operator) {
+                case '+':
+                    currentValue += nextValue;
+                    break;
+                case '-':
+                    currentValue -= nextValue;
+                    break;
+                case '*':
+                    currentValue *= nextValue;
+                    break;
+                case '/':
+                    currentValue /= nextValue;
+                    break;
+                case '%':
+                    currentValue %= nextValue;
+                    break;
+            }
+        }
+        
+        return currentValue;
+    } catch (error) {
+        return 'Error';
+    }
 }
