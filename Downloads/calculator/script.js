@@ -15,7 +15,7 @@ function appendOperator(operator) {
 }
 
 function appendDecimal() {
-    if (!display.innerText.includes('.')) {
+    if (!endsWithOperator() && !display.innerText.includes('.')) {
         display.innerText += '.';
     }
 }
@@ -34,7 +34,7 @@ function deleteDigit() {
 
 function calculate() {
     if (!endsWithOperator()) {
-        const result = value(display,innerText);
+        const result = evaluateExpression(display.innerText);
         display.innerText = result;
     }
 }
@@ -43,14 +43,15 @@ function endsWithOperator() {
     return /[+\-*/%]$/.test(display.innerText);
 }
 
-function value(expression, innerText) {
-    try{
+function evaluateExpression(expression) {
+    try {
         const tokens = expression.split(/([+\-*/%])/);
         let currentValue = parseFloat(tokens[0]);
-
-        for(let i = 1; i < tokens.length; i+=2){
+        
+        for (let i = 1; i < tokens.length; i += 2) {
             const operator = tokens[i];
-            const nextValue = parseFloat(tokens[i+1]);
+            const nextValue = parseFloat(tokens[i + 1]);
+            
             switch (operator) {
                 case '+':
                     currentValue += nextValue;
